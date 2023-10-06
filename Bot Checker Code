@@ -1,0 +1,65 @@
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+
+// Function to generate a random integer between min and max (inclusive)
+int getRandomNumber(int min, int max) {
+    return min + rand() % (max - min + 1);
+}
+
+// Function to generate a random math problem
+void generateMathProblem(int& num1, int& num2, char& operatorChar) {
+    num1 = getRandomNumber(1, 20);
+    num2 = getRandomNumber(1, 20);
+
+    int operatorIndex = getRandomNumber(0, 2);
+    char operators[] = {'+', '-', '*'};
+    operatorChar = operators[operatorIndex];
+}
+
+// Function to check if the user's answer is correct
+bool isAnswerCorrect(int num1, int num2, char operatorChar, int userAnswer) {
+    int correctAnswer;
+
+    switch (operatorChar) {
+        case '+': correctAnswer = num1 + num2; break;
+        case '-': correctAnswer = num1 - num2; break;
+        case '*': correctAnswer = num1 * num2; break;
+    }
+
+    return userAnswer == correctAnswer;
+}
+
+int main() {
+    srand(time(NULL));
+    int numProblems = 5;
+    int correctAnswers = 0;
+
+    for (int i = 1; i <= numProblems; ++i) {
+        int num1, num2, userAnswer;
+        char operatorChar;
+
+        generateMathProblem(num1, num2, operatorChar);
+
+        std::cout << "Problem " << i << ": ";
+        std::cout << num1 << " " << operatorChar << " " << num2 << " = ? ";
+        std::cin >> userAnswer;
+
+        if (isAnswerCorrect(num1, num2, operatorChar, userAnswer)) {
+            std::cout << "Correct!" << std::endl;
+            correctAnswers++;
+        } else {
+            std::cout << "Incorrect. The correct answer is " << num1 << " " << operatorChar << " " << num2 << " = " << (num1 + num2) << std::endl;
+        }
+    }
+
+    std::cout << "You answered " << correctAnswers << " out of " << numProblems << " problems correctly." << std::endl;
+
+    if (correctAnswers >= 4) {
+        std::cout << "Congratulations! You are a human." << std::endl;
+    } else {
+        std::cout << "Sorry, but your performance suggests you might be a bot." << std::endl;
+    }
+
+    return 0;
+}
